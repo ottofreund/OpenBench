@@ -22,3 +22,6 @@ Media/Events/*
 *.epd
 
 .venv
+.python-version
+
+.env
