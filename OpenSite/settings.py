@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import dotenv
+
+dotenv.load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,7 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECURITY WARNING: don't run with debug turned on in production!
-SECRET_KEY = '@!zw2l8til1(0eb_nk+1w!(n78gqm&u)s)_v7#k6iseia@g9q0'
+SECRET_KEY = os.environ['SECRET_KEY']
+if not SECRET_KEY.strip():
+    raise ValueError("SECRET_KEY must not be empty")
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -87,10 +92,18 @@ WSGI_APPLICATION = 'OpenSite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+DB_PASSWORD = os.environ["DB_PASSWORD"]
+if not DB_PASSWORD:
+    raise ValueError("DB_PASSWORD must not be empty")
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE'  : 'django.db.backends.mysql',
+        'NAME'    : 'openbench',
+        'USER'    : 'root',
+        'PASSWORD': DB_PASSWORD,
+        'HOST'    : 'localhost',  # Change to your MySQL server's host, if you modified it
+        'PORT'    : '3306'        # Change to your MySQL server's port, if you modified it
     }
 }
 
